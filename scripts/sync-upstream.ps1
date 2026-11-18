@@ -14,6 +14,27 @@ function Invoke-Git {
   }
 }
 
+function Invoke-GitWithRetry {
+  param(
+    [Parameter(Mandatory)][string[]]$GitArgs,
+    [int]$Attempts = 3
+  )
+
+  for ($attempt = 1; $attempt -le $Attempts; $attempt++) {
+    try {
+      Invoke-Git -GitArgs $GitArgs
+      return
+    } catch {
+      if ($attempt -eq $Attempts) {
+        throw
+      }
+      $delay = 2 * $attempt
+      Write-Host "Git 获取失败（第 $attempt/$Attempts 次），将在 $delay 秒后重试……" -ForegroundColor Yellow
+      Start-Sleep -Seconds $delay
+    }
+  }
+}
+
 function Get-GitText {
   param([Parameter(Mandatory)][string[]]$GitArgs)
 
@@ -117,8 +138,8 @@ try {
   }
 
   Write-Host "`n正在从 origin 和 upstream 获取更新……" -ForegroundColor Cyan
-  Invoke-Git -GitArgs @('fetch', '--prune', 'origin')
-  Invoke-Git -GitArgs @('fetch', '--prune', 'upstream')
+  Invoke-GitWithRetry -GitArgs @('fetch', '--prune', 'origin')
+  Invoke-GitWithRetry -GitArgs @('fetch', '--prune', 'upstream')
 
   if (-not (Test-Ref -Name 'refs/remotes/upstream/main')) {
     throw '未找到官方 upstream/main 分支。'

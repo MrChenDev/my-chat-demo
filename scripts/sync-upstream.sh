@@ -12,6 +12,24 @@ git_run() {
   git -C "$repo_root" "$@"
 }
 
+git_run_with_retry() {
+  local attempts=3
+  local attempt delay status
+  for ((attempt = 1; attempt <= attempts; attempt++)); do
+    if git_run "$@"; then
+      return 0
+    else
+      status=$?
+    fi
+    if (( attempt == attempts )); then
+      return "$status"
+    fi
+    delay=$((2 * attempt))
+    printf 'Git 获取失败（第 %s/%s 次），将在 %s 秒后重试……\n' "$attempt" "$attempts" "$delay" >&2
+    sleep "$delay"
+  done
+}
+
 git_text() {
   git -C "$repo_root" "$@"
 }
@@ -126,8 +144,8 @@ for ref in refs/heads/main refs/heads/dev; do
 done
 
 printf '\n正在从 origin 和 upstream 获取更新……\n'
-git_run fetch --prune origin
-git_run fetch --prune upstream
+git_run_with_retry fetch --prune origin
+git_run_with_retry fetch --prune upstream
 
 if ! has_ref refs/remotes/upstream/main; then
   printf '未找到官方 upstream/main 分支。\n' >&2
