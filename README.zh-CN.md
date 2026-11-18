@@ -45,7 +45,7 @@ API Key 和设置保存在浏览器 localStorage，会话及附件原件保存�
 
 ## 开发
 
-Windows 用户可双击仓库根目录的 `sync-upstream.cmd`，将官方 `main` 更新快进到本地 `main`，再合并到 `dev` 并推送到 `origin`。首次运行会添加官方 `upstream` 远端。脚本要求当前位于 `dev` 且工作区干净；遇到分支分叉或合并冲突会停止并保留现状，不会强制推送。推送中途若某个分支已成功、后续分支推送失败，已成功的推送不会回滚。
+上游同步脚本统一放在 `scripts/`：Windows 用户可双击 `scripts/sync-upstream.cmd`；Linux 用户（包括 Rocky Linux 和 Fedora）可在仓库根目录运行 `./scripts/sync-upstream.sh`。首次运行会添加官方 `upstream` 远端。脚本将官方 `main` 快进到本地 `main`，再合并到 `dev` 并推送到 `origin`。运行前需切到 `dev`，并先提交或 stash 所有改动；遇到分支分叉或合并冲突会停止，不会强制推送。推送中途若某个分支已成功、后续分支推送失败，已成功的推送不会回滚。
 
 | 命令          | 用途                |
 | ------------- | ------------------- |

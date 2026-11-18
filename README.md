@@ -45,7 +45,7 @@ Settings → Data → Delete all chats clears all local conversations, original 
 
 ## Development
 
-On Windows, double-click `sync-upstream.cmd` in the repository root to fast-forward local `main` to the official `main`, merge it into `dev`, and push both branches to `origin`. The first run adds the official `upstream` remote. The script requires a clean working tree on `dev`; it stops on diverged branches or merge conflicts and never force-pushes. If one branch push succeeds before a later push fails, the successful push is not rolled back.
+Upstream sync scripts are kept in `scripts/`. On Windows, double-click `scripts/sync-upstream.cmd`; on Linux (including Rocky Linux and Fedora), run `./scripts/sync-upstream.sh` from the repository root. The first run adds the official `upstream` remote. The script fast-forwards local `main` to the official `main`, merges it into `dev`, and pushes both branches to `origin`. Run it from a clean `dev` branch after committing or stashing all changes; it stops on diverged branches or merge conflicts and never force-pushes. If one branch push succeeds before a later push fails, the successful push is not rolled back.
 
 | Command       | Description                  |
 | ------------- | ---------------------------- |
