@@ -76,15 +76,15 @@ function Add-UpstreamIfNeeded {
   if ($remotes -contains 'upstream') {
     $configuredUpstream = Get-RemoteUrl -Name 'upstream'
     if ($configuredUpstream -notmatch $officialRepoPattern) {
-      throw "The upstream remote does not point to the official repository: $configuredUpstream"
+      throw 'The upstream remote does not point to the official repository.'
     }
   } else {
     Write-Host "Adding upstream remote: $upstreamUrl"
     Invoke-Git -GitArgs @('remote', 'add', 'upstream', $upstreamUrl)
   }
 
-  Write-Host "Fork (origin): $originUrl"
-  Write-Host "Official (upstream): $(Get-RemoteUrl -Name 'upstream')"
+  Write-Host 'Fork remote (origin): configured'
+  Write-Host 'Official remote (upstream): configured'
 }
 
 try {

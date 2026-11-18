@@ -107,7 +107,7 @@ fi
 if git -C "$repo_root" remote get-url upstream >/dev/null 2>&1; then
   configured_upstream="$(git_text remote get-url upstream)"
   if ! is_official_repo "$configured_upstream"; then
-    printf 'The upstream remote does not point to the official repository: %s\n' "$configured_upstream" >&2
+    printf 'The upstream remote does not point to the official repository.\n' >&2
     exit 1
   fi
 else
@@ -115,8 +115,8 @@ else
   git_run remote add upstream "$upstream_url"
 fi
 
-printf 'Fork (origin): %s\n' "$origin_url"
-printf 'Official (upstream): %s\n' "$(git_text remote get-url upstream)"
+printf 'Fork remote (origin): configured\n'
+printf 'Official remote (upstream): configured\n'
 
 for ref in refs/heads/main refs/heads/dev; do
   if ! has_ref "$ref"; then
